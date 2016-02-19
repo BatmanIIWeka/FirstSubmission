@@ -1,11 +1,11 @@
-## Première soumission - en cours
+# Première soumission - en cours
 
-# Done :
+## Done :
 
 - Récuperer les données
 - Récuperer les archives
 - Créer une classe Java pour effectuer la première soumission (avant dimanche)
 
-# To Do :
+## To Do :
 
 - La faire fonctionner... >_<
