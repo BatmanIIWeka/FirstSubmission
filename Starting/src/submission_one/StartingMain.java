@@ -27,7 +27,7 @@ import weka.core.matrix.LinearRegression;
  * STEP 5 - Submit the zip in the "Submit/View Results" tab on the challenge website
  *          and see your score in the "Results" tab
  * 
- * @author MicroBES
+ * @originalauthor MicroBES
  *
  */
 public class StartingMain {
@@ -48,7 +48,7 @@ public class StartingMain {
     	Instances testData = new Instances(new FileReader(testPath));
 
     	
-    	// Set the attribute to predict (the last one) in each dataset
+    	// Set the attribute to predict in each dataset
     	int ind = 6;
     	trainData.setClassIndex(ind);
     	validData.setClassIndex(ind);
@@ -57,7 +57,7 @@ public class StartingMain {
     	
     	// Extract the attribute to predict 
     	// in order to convert predictions index to prediction label later
-    	Attribute timeInHospital = trainData.attribute(ind);
+    	Attribute crimeSolved = trainData.attribute(ind);
  
     	
     	// Define a model (J48 is a decision tree) and train it
@@ -76,6 +76,8 @@ public class StartingMain {
     	testEval.evaluateModel(model, testData);
     	FastVector testPred = testEval.predictions();
     	
+    	// TODO Cyriaque : add a FileDescriptor to create file if not exists
+    	//					else the PrintWriter will fail (thanks, Master2 >_<)
     	
     	// Define a PrintWriter to save predicted value in files
     	// NOTE : submitted files on Codalab must have the name "valid.predict" and "test.predict" 	
@@ -85,7 +87,7 @@ public class StartingMain {
     	pw = new PrintWriter("valid.predict", "UTF-8");
     	for (int i = 0; i < validPred.size(); i++) {
 			double val = ((NominalPrediction) validPred.elementAt(i)).predicted();
-			pw.print(timeInHospital.value((int) val) + "\n");
+			pw.print(crimeSolved.value((int) val) + "\n");
 		}
     	pw.close();
     	
@@ -94,7 +96,7 @@ public class StartingMain {
     	pw = new PrintWriter("test.predict", "UTF-8");
     	for (int i = 0; i < testPred.size(); i++) {
 			double val = ((NominalPrediction) testPred.elementAt(i)).predicted();
-			pw.print(timeInHospital.value((int) val) + "\n");
+			pw.print(crimeSolved.value((int) val) + "\n");
 		}
     	pw.close();
 
