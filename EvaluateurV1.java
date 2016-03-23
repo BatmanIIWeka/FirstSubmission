@@ -74,7 +74,6 @@ public class EvaluateurV1 {
 		classifiers.add(new REPTree());
 		classifiers.add(new RandomTree());
 		classifiers.add(new OneR());
-		classifiers.add(new JRip());
 		classifiers.add(new DecisionTable());
 		classifiers.add(new BayesNet());
 		//classifiers.add(new RandomForest());	// error heap space..
@@ -89,7 +88,7 @@ public class EvaluateurV1 {
 			cls.buildClassifier(trainData);
 			
 			Evaluation ev = new Evaluation(trainData);
-	    	ev.evaluateModel(cls, validData);
+			ev.evaluateModel(cls, validData);
 	    	FastVector pred = ev.predictions();
 	    	
 			pw = new PrintWriter(cls.getClass().getName() + "_valid.pred", "UTF-8");
@@ -97,7 +96,7 @@ public class EvaluateurV1 {
 				double val = ((NominalPrediction) pred.elementAt(i)).predicted();
 				pw.print((crimeSolved.value((int) val)) + "\n");
 			}
-	    	pw.close();
+			pw.close();
 		}
 		
 		/*
@@ -117,7 +116,7 @@ public class EvaluateurV1 {
 			}
 			h.put(cls, score);
 			f.close();
-	    	System.out.println("Comparateur : " + cls.getClass().getName() + " -> " + score + " points");
+			System.out.println("Comparateur : " + cls.getClass().getName() + " -> " + score + " points");
 		}
 		// Then, we simply populate the result with the top NB_RESULTS best, and return it
 		for(int i = 0 ; i < NB_RESULTS ; i++) {
