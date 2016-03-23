@@ -1,19 +1,23 @@
-# Première soumission - en cours
+# Seconde soumission - en cours
 
 ## Done :
 
+- Première soumission
 - Récuperer les données
 - Récuperer les archives
-- Créer une classe Java pour effectuer la première soumission (avant dimanche)
+- Créer une classe Comparateur
+- Créer une classe Evaluateur
+- Créer une classe Preprocesseur
 
 ## To Do :
 
-- La faire fonctionner... >_<
+- Intégration
+- Tests unitaires
 
 ## Divers
 
-Le dossier "Starting" contient la classe sur laquelle travailler.
-C'est un projet Eclipse, mais elle devrait fonctionner avec d'autres IDE.
+Le dossier "submission_2" contient la classe sur laquelle travailler.
+C'est un package Eclipse, mais elle devrait fonctionner avec d'autres IDE.
 Vous aurez probablement à modifier le CLASSPATH pour ajouter weka.jar, les settings sont pour mon PC.
 Clic droit sur le projet --> Build Path --> Add external Archives --> Add external JARs --> sélectionner weka.jar
 
