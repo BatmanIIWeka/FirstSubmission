@@ -89,7 +89,7 @@ public class EvaluateurV1 {
 			
 			Evaluation ev = new Evaluation(trainData);
 			ev.evaluateModel(cls, validData);
-	    	FastVector pred = ev.predictions();
+			FastVector pred = ev.predictions();
 	    	
 			pw = new PrintWriter(cls.getClass().getName() + "_valid.pred", "UTF-8");
 			for (int i = 0; i < pred.size(); i++) {
