@@ -1,8 +1,9 @@
-# Seconde soumission - en cours
+# Dossier final - en cours
 
 ## Done :
 
 - Première soumission
+- Seconde soumission
 - Récuperer les données
 - Récuperer les archives
 - Créer une classe Comparateur
@@ -12,6 +13,7 @@
 ## To Do :
 
 - Intégration
+- Dossier papier
 - Tests unitaires
 
 ## Divers
