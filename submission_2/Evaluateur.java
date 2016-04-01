@@ -11,6 +11,8 @@ import weka.classifiers.trees.REPTree;
 import weka.classifiers.trees.RandomTree;
 import weka.classifiers.bayes.*;
 import weka.classifiers.evaluation.NominalPrediction;
+import weka.classifiers.evaluation.Prediction;
+import weka.classifiers.evaluation.ThresholdCurve;
 import weka.core.FastVector;
 
 import java.io.BufferedReader;
@@ -29,9 +31,9 @@ public class Evaluateur {
 	private int runs;
 	// Number of classifiers to return (best one, then second best, and so on)
 	private int NB_RESULTS;
+	private String startPath;
 	
 	public Evaluateur() {
-		
 		this.folds = 10;
 		this.runs = 0;
 		this.NB_RESULTS = 3;
@@ -41,6 +43,13 @@ public class Evaluateur {
 		this.folds = f;
 		this.runs = r;
 		this.NB_RESULTS = nb;
+	}
+	
+	public Evaluateur(String path) {
+		this.folds = 10;
+		this.runs = 0;
+		this.NB_RESULTS = 3;
+		this.startPath = path;
 	}
 	
 	/*
@@ -89,8 +98,13 @@ public class Evaluateur {
 			Evaluation ev = new Evaluation(trainData);
 			ev.evaluateModel(cls, testData);
 			FastVector pred = ev.predictions();
+			
+	    	ThresholdCurve tc = new ThresholdCurve();
+	    	Instances tcurve = tc.getCurve(pred);
+	    	System.out.println("ROC : " + this.getAUC(ind, pred, crimeSolved));
+	    	//System.out.println("Curve : " + /*ThresholdCurve.getROCArea(*/tcurve);
 	    	
-			pw = new PrintWriter(cls.getClass().getName() + "_valid.pred", "UTF-8");
+			pw = new PrintWriter(startPath + cls.getClass().getName() + "_valid.pred", "UTF-8");
 			for (int i = 0; i < pred.size(); i++) {
 				double val = ((NominalPrediction) pred.elementAt(i)).predicted();
 				pw.print((crimeSolved.value((int) val)) + "\n");
@@ -107,7 +121,7 @@ public class Evaluateur {
 		// We iterate through classifiers, getting good guesses for each one as score
 		for (Classifier cls : classifiers) {
 			int score = 0;
-			BufferedReader f = new BufferedReader(new FileReader(cls.getClass().getName() + "_valid.pred"));
+			BufferedReader f = new BufferedReader(new FileReader(startPath + cls.getClass().getName() + "_valid.pred"));
 			String l = f.readLine();
 			while(l != null && !(l.isEmpty())) {
 				score += Integer.parseInt(l);
@@ -134,4 +148,57 @@ public class Evaluateur {
 		}
 		return (results);
 	}
+
+	private double getAUC(int labelIndex, FastVector pred, Attribute cs)
+	{
+		if (pred.size() == 0)
+			return Double.NaN;
+		ThresholdCurve tc = new ThresholdCurve();
+		Instances result = tc.getCurve(pred);
+		double d = ThresholdCurve.getROCArea(result);
+		if (!Double.isNaN(d))
+			return d;
+		else
+		{
+			int tP = 0, tN = 0, fP = 0, fN = 0;
+			double epsilon = 0.1;
+			//			System.err.println("\nauc problem solving");
+			for (int i = 0; i < pred.size(); i++)
+			{
+				NominalPrediction p = ((NominalPrediction) pred.elementAt(i));
+				double actual = Double.parseDouble(cs.value((int) p.predicted())) == 0.0 ? 1.0 : 0.0;
+				//				System.err.println(actual + " " + p.predicted());
+				if (p.predicted() == 1.0)
+				{
+					if (actual == p.predicted())
+						tP++;
+					else
+						fP++;
+				}
+				else
+				{
+					if (actual == p.predicted())
+						tN++;
+					else
+						fN++;
+				}
+			}
+						if (tP == 0 && tN == 0) // no correct predictions
+							return 0.0;
+						else if (fP == 0 && fP == 0) // no incorrect predictions
+							return 1.0;
+						else 
+			if (tP == 0 && fN == 0) // no positive instances
+				return Double.NaN;
+			else if (tN == 0 && fP == 0) // no negative instances
+				return Double.NaN;
+			else
+				throw new IllegalStateException("WTF TP:" + tP + " FP:" + fP + " TN:" + tN + " FN:" + fN);
+		}
+	}
+	
+	public double abs(double d) {
+		return (d >= 0.0 ? d : -d);
+	}
+
 }
