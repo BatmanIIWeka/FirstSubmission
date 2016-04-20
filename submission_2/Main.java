@@ -1,4 +1,5 @@
-package submission_2;
+//package submission_2;
+package batman;
 
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -47,11 +48,16 @@ public class Main {
     	System.out.println("Classifiers evaluation finished.");
     	System.out.println("Starting comparison...");
     	
-    	(new Comparateur()).Comp(classifiers);
+    	//(new Comparateur()).Comp(classifiers);
+    	Comparateur compare = new Comparateur(classifiers);
+    	compare.Comp();
     	
     	System.out.println("Done solving " + challengeName + ".\nCreating and zipping files...");
     	
-    	preproc.saveFiles();
+    	File validRes = new File("/home/Alexandrina/workspace/BatmanProject/ref_valid.predict");    
+    	File testRes = new File("/home/Alexandrina/workspace/BatmanProject/ref_test.predict");
+    	
+    	preproc.saveFiles("bat2_pred.zip", validRes, testRes);
     	
     	System.out.println("\nFiles written and zipped at bat2_pred.zip.");
 	}
